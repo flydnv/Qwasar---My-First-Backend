@@ -50,7 +50,7 @@ app.get("/public", (req, res) => {
 app.get("/protected", (req,res) => {
     if(!req.headers.authorization){
         res.set(['WWW-Authenticate', 'Basic realm="401"'])
-        res.status(401).send("Not Authorized.");
+        res.status(401).send("Not authorized.");
     }
     const array  = atob(req.headers.authorization.split(' ')[1]).split(':');
     console.log(array);
@@ -61,7 +61,7 @@ app.get("/protected", (req,res) => {
         return;
     }
     res.set(['WWW-Authenticate', 'Basic realm="401"'])
-    res.status(401).send("Not Authorized.");
+    res.status(401).send("Not authorized.");
 });
 
 app.listen(port, ()=>{
