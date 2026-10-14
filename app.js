@@ -48,12 +48,16 @@ app.get("/public", (req, res) => {
     res.send("Everybody can see this page");
 });
 app.get("/protected", (req,res) => {
-    console.log(req.headers);
-    console.log(req.headers.authorization);
+    const base64String  = req.headers.authorization.split(" ")[1];
+    // const decodedString = Buffer.from(base64String, "base64").toString("utf-8");
+    const decodedString = atob[base64String];
+    const [admin, password] = decodedString.split(":");
 
+    if(admin==="admin" && password==="admin"){
+        res.send("Welcome, authenticated client")
+    }
     res.set(['WWW-Authenticate', 'Basic realm="401"'])
     res.status(401).send("Not Authorized.");
-    
 })
 
 app.listen(port, ()=>{
