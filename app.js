@@ -48,12 +48,17 @@ app.get("/public", (req, res) => {
     res.send("Everybody can see this page");
 });
 app.get("/protected", (req,res) => {
-    const array  = atob(req.headers.authorization.split('')[1]).split(':');
+    if(!req.headers.authorization){
+        res.set(['WWW-Authenticate', 'Basic realm="401"'])
+        res.status(401).send("Not Authorized.");
+    }
+    const array  = atob(req.headers.authorization.split(' ')[1]).split(':');
     console.log(array);
     const username = array[0];
     const password = array[1];
     if(username=="admin" && password=="admin"){
         res.send("Welcome, authenticated client")
+        return;
     }
     res.set(['WWW-Authenticate', 'Basic realm="401"'])
     res.status(401).send("Not Authorized.");
